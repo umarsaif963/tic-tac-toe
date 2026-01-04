@@ -7,6 +7,8 @@ const board = document.getElementById("board");
 const status = document.getElementById("status");
 const againBtn = document.getElementById("againBtn");
 const homeBtn = document.getElementById("homeBtn");
+const line = document.getElementById("line");
+const lineEl = line.querySelector("line");
 const cells = document.querySelectorAll(".cell");
 
 document.getElementById("playBtn").addEventListener("click", startGame);
@@ -40,13 +42,11 @@ cells.forEach((cell) => {
     cell.classList.add("taken");
     if (win(player)) {
       playing = false;
+      drawLine(getWinPattern(player));
       status.textContent = `Player ${player} wins!`;
       status.classList.remove("hidden");
       againBtn.classList.remove("hidden");
       homeBtn.classList.remove("hidden");
-      cells.forEach((c) => {
-        if (c.textContent === player) c.classList.add("winner");
-      });
       return;
     }
     if (num.every((v) => typeof v === "string")) {
@@ -67,6 +67,26 @@ function restoreBoard() {
     cell.textContent = Number(cell.dataset.index) + 1;
     cell.classList.remove("taken", "winner");
   });
+  line.classList.add("hidden");
+}
+
+function drawLine(pattern) {
+  const centers = [
+    [50, 50], [158, 50], [266, 50],
+    [50, 158], [158, 158], [266, 158],
+    [50, 266], [158, 266], [266, 266]
+  ];
+  const start = centers[pattern[0]];
+  const end = centers[pattern[2]];
+  const dx = end[0] - start[0];
+  const dy = end[1] - start[1];
+  const len = Math.sqrt(dx * dx + dy * dy) || 1;
+  const ext = 28;
+  lineEl.setAttribute("x1", start[0] - (dx / len) * ext);
+  lineEl.setAttribute("y1", start[1] - (dy / len) * ext);
+  lineEl.setAttribute("x2", end[0] + (dx / len) * ext);
+  lineEl.setAttribute("y2", end[1] + (dy / len) * ext);
+  line.classList.remove("hidden");
 }
 
 function startGame() {
@@ -83,6 +103,10 @@ function startGame() {
 }
 
 function win(currentPlayer) {
+  return getWinPattern(currentPlayer) !== null;
+}
+
+function getWinPattern(currentPlayer) {
   let possibilities = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
@@ -92,8 +116,8 @@ function win(currentPlayer) {
     if (num[possibilities[i][0]] === currentPlayer &&
         num[possibilities[i][1]] === currentPlayer &&
         num[possibilities[i][2]] === currentPlayer) {
-      return true;
+      return possibilities[i];
     }
   }
-  return false;
+  return null;
 }
