@@ -26,6 +26,12 @@ h1 {
   margin-bottom: 20px;
 }
 
+h2 {
+  color: #666;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
 button {
   font-size: 18px;
   padding: 12px 28px;
@@ -44,6 +50,7 @@ button:hover {
 
 .menu {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   margin: 20px 0;
 }
