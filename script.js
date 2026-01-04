@@ -14,10 +14,6 @@ const cells = document.querySelectorAll(".cell");
 
 document.getElementById("multiBtn").addEventListener("click", () => startGame("multiplayer"));
 document.getElementById("computerBtn").addEventListener("click", () => startGame("computer"));
-document.getElementById("exitBtn").addEventListener("click", () => {
-  document.body.innerHTML = "";
-  status.textContent = "Thanks for playing!";
-});
 
 againBtn.addEventListener("click", () => startGame(mode));
 
